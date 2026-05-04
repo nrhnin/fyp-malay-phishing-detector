@@ -1,13 +1,17 @@
-import pandas as pd
+from pathlib import Path
 
+import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from ml_classifier import normalize_text
+from core.ml_classifier import normalize_text
 
+
+# Resolve project root safely for local + Render deployment
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load dataset for RAG retrieval
-DATASET_PATH = "../data/dataset.csv"
+DATASET_PATH = BASE_DIR / "data" / "dataset.csv"
 
 df = pd.read_csv(DATASET_PATH)
 
@@ -38,7 +42,11 @@ dataset_vectors = retrieval_vectorizer.fit_transform(df["clean_text"])
 #
 # Output:
 # - list of dictionaries containing text, label, and similarity score
-def retrieve_similar_examples(message_text: str, top_k: int = 3, label_filter=None) -> list[dict]:
+def retrieve_similar_examples(
+        message_text: str,
+        top_k: int = 3,
+        label_filter=None
+) -> list[dict]:
     cleaned_message = normalize_text(message_text)
 
     message_vector = retrieval_vectorizer.transform([cleaned_message])
