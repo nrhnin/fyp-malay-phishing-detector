@@ -28,7 +28,7 @@ from bot.bot_state import (
 # Text message handler
 
 # Main handler for private chat text messages
-async def handle_private_text_message(
+async def handle_text_message(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
@@ -58,7 +58,7 @@ async def handle_private_text_message(
 
     # Start a new delayed processing task
     private_process_tasks[user_id] = asyncio.create_task(
-        process_private_messages_after_delay(
+        process_text_message(
             user_id,
             chat_id,
             context
@@ -105,7 +105,7 @@ async def handle_non_text_message(
 
     # Start a new delayed processing task
     private_non_text_process_tasks[user_id] = asyncio.create_task(
-        process_private_non_text_after_delay(
+        process_non_text_message(
             user_id,
             chat_id,
             context
@@ -116,7 +116,7 @@ async def handle_non_text_message(
 # Text message processing
 
 # Process text messages after a short delay
-async def process_private_messages_after_delay(
+async def process_text_message(
         user_id: int,
         chat_id: int,
         context: ContextTypes.DEFAULT_TYPE
@@ -247,7 +247,7 @@ async def process_private_messages_after_delay(
 # Non-text / unsupported content processing
 
 # Process unsupported content after a short delay
-async def process_private_non_text_after_delay(
+async def process_non_text_message(
         user_id: int,
         chat_id: int,
         context: ContextTypes.DEFAULT_TYPE
