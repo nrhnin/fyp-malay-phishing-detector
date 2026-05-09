@@ -28,7 +28,7 @@ from bot.bot_state import (
 # Text message handler
 
 # Main handler for private chat text messages
-async def handle_text_message(
+async def handle_private_text(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
@@ -58,7 +58,7 @@ async def handle_text_message(
 
     # Start a new delayed processing task
     private_process_tasks[user_id] = asyncio.create_task(
-        process_text_message(
+        process_private_text(
             user_id,
             chat_id,
             context
@@ -69,7 +69,7 @@ async def handle_text_message(
 # Non-text content handler
 
 # Main handler for unsupported non-text content in private chat mode
-async def handle_non_text_message(
+async def handle_non_text(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
@@ -105,7 +105,7 @@ async def handle_non_text_message(
 
     # Start a new delayed processing task
     private_non_text_process_tasks[user_id] = asyncio.create_task(
-        process_non_text_message(
+        process_non_text(
             user_id,
             chat_id,
             context
@@ -116,7 +116,7 @@ async def handle_non_text_message(
 # Text message processing
 
 # Process text messages after a short delay
-async def process_text_message(
+async def process_private_text(
         user_id: int,
         chat_id: int,
         context: ContextTypes.DEFAULT_TYPE
@@ -247,7 +247,7 @@ async def process_text_message(
 # Non-text / unsupported content processing
 
 # Process unsupported content after a short delay
-async def process_non_text_message(
+async def process_non_text(
         user_id: int,
         chat_id: int,
         context: ContextTypes.DEFAULT_TYPE
