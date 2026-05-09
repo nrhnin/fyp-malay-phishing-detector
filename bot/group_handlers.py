@@ -56,7 +56,7 @@ async def handle_text_message(
 
     # Start a new delayed processing task
     group_process_tasks[group_key] = asyncio.create_task(
-        process_group_messages_after_delay(
+        process_text_message(
             group_key,
             chat_id,
             context
