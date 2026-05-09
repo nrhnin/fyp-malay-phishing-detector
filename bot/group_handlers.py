@@ -24,7 +24,7 @@ from bot.bot_state import (
 # Text message handler
 
 # Main handler for group chat text messages
-async def handle_group_text_message(
+async def handle_text_message(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE
 ) -> None:
@@ -67,7 +67,7 @@ async def handle_group_text_message(
 # Text message processing
 
 # Process group chat text messages after a short delay
-async def process_group_messages_after_delay(
+async def process_text_message(
         group_key: tuple,
         chat_id: int,
         context: ContextTypes.DEFAULT_TYPE
