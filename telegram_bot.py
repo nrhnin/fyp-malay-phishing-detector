@@ -18,11 +18,11 @@ from bot.command_handlers import (
 )
 
 from bot.private_handlers import (
-    handle_private_text_message,
-    handle_non_text_message,
+    handle_private_text,
+    handle_non_text,
 )
 
-from bot.group_handlers import handle_group_text_message
+from bot.group_handlers import handle_group_text
 
 
 # Load environment variables from .env
@@ -42,11 +42,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     chat_type = update.effective_chat.type
 
     if chat_type == "private":
-        await handle_private_text_message(update, context)
+        await handle_private_text(update, context)
         return
 
     if chat_type in ["group", "supergroup"]:
-        await handle_group_text_message(update, context)
+        await handle_group_text(update, context)
         return
 
 
@@ -65,7 +65,7 @@ def main() -> None:
     app.add_handler(CommandHandler("stop", stop_command))
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    app.add_handler(MessageHandler(~filters.TEXT & ~filters.COMMAND, handle_non_text_message))
+    app.add_handler(MessageHandler(~filters.TEXT & ~filters.COMMAND, handle_non_text))
 
     app.add_error_handler(error_handler)
 
