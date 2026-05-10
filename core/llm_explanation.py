@@ -244,7 +244,7 @@ Security context:
 - Be conservative.
 - Do not flag normal casual messages.
 - Do not flag simple money borrowing between mutuals or connections.
-- If unsure, return SAFE.
+- If unsure, return 'SAFE'.
 
 Prompt injection indicator detected:
 {"YES" if prompt_injection_detected else "NO"}
@@ -290,8 +290,7 @@ Answer:
 
         result = response.choices[0].message.content.strip().upper()
 
-        # Strict output parsing.
-        # Anything other than clear SUSPICIOUS is treated as SAFE.
+        # Anything other than clear suspicious is treated as safe
         if result.startswith("SUSPICIOUS"):
             return True
 
