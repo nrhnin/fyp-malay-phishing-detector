@@ -102,7 +102,7 @@ async def process_group_text(
                 label_filter=1
             )
 
-            # If ML classifies message as phishing/scam
+            # If ML classifies message as phishing
             if prediction == 1:
                 phishing_messages.append({
                     "message_id": item["message_id"],
@@ -112,7 +112,7 @@ async def process_group_text(
                 })
                 continue
 
-            # If ML classifies message as safe, use LLM verification as double-check
+            # If ML classifies message as safe, use LLM verification for double-checking
             llm_suspicious = verify_safe_message(message_text, similar_examples)
 
             if llm_suspicious:
@@ -128,18 +128,19 @@ async def process_group_text(
 
         user_display = recent_messages[-1]["user_display"] if recent_messages else "Pengguna ini"
 
-        # Condition:
-        # 1. User sends more than 5 messages in 15 seconds
-        # 2. At least 2 messages are phishing
-        # Output: One general group spam/scam alert only
+        # Condition for spam warning display
         if (
+                
+                # User sends more than 5 messages
                 message_count > GROUP_RATE_LIMIT_COUNT
+                
+                # At least 2 messages are classified as phishing
                 and phishing_count >= GROUP_PHISHING_THRESHOLD
         ):
             await context.bot.send_message(
                 chat_id=chat_id,
                 text=(
-                    "🛑 Amaran aktiviti mencurigakan.\n\n"
+                    "🛑 Amaran: Aktiviti mencurigakan.\n\n"
                     f"{user_display} telah menghantar {message_count} mesej dalam "
                     f"{GROUP_RATE_LIMIT_WINDOW} saat.\n"
                     f"Daripada jumlah tersebut, {phishing_count} mesej dikesan "
@@ -152,7 +153,7 @@ async def process_group_text(
             group_process_tasks.pop(group_key, None)
             return
 
-        # If only one phishing/scam message is detected, display normal phishing
+        # If only one phishing message is detected, display normal phishing alert
         if phishing_count == 1:
             phishing_item = phishing_messages[0]
             explanation = generate_explanation(
@@ -162,14 +163,17 @@ async def process_group_text(
 
             if phishing_item["alert_type"] == "ml_phishing":
                 alert_text = (
-                        "⚠️ Amaran: Mesej ini disyaki sebagai phishing/scam.\n\n"
+                        "⚠️ Amaran: Mesej ini dikesan sebagai phishing/scam.\n\n"
                         + explanation
+                        + "\n\n"
+                        "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
                 )
             else:
                 alert_text = (
                         "⚠️ Amaran: Mesej ini kemungkinan mempunyai unsur phishing/scam.\n\n"
-                        "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan.\n\n"
                         + explanation
+                        + "\n\n"
+                        "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
                 )
 
             await context.bot.send_message(
@@ -208,10 +212,9 @@ async def process_group_text(
                     reply_to_message_id=phishing_item["message_id"]
                 )
 
-        # If all messages are safe, group mode stays silent.
+        # If all messages are safe, group chat mode stays silent.
         group_message_buffer[group_key].clear()
         group_process_tasks.pop(group_key, None)
 
     except asyncio.CancelledError:
-        # Expected when the same user sends another group message before the delay ends
         return
