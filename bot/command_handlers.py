@@ -16,44 +16,45 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.message.reply_text(
             "👋 Selamat datang ke Malay Phishing and Scam Detector.\n\n"
             "Bot ini boleh digunakan dalam dua cara:\n\n"
-            "1. Private Chat Detector\n"
-            "Taip /scan untuk aktifkan mode semakan mesej secara peribadi.\n\n"
-            "2. Group Scanner\n"
+            "1. Private Chat Mode\n"
+            "Taip /scan untuk aktifkan mod semakan mesej secara peribadi.\n\n"
+            "2. Group Chat Mode\n"
             "Tambah bot ini ke dalam group Telegram supaya mesej dalam group boleh dipantau secara automatik.\n\n"
             "Taip /help untuk panduan ringkas."
         )
 
 
-# Send a help message when user types /help
+# Send a user guide message when user types /help
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.message:
         await update.message.reply_text(
             "📌 Panduan penggunaan:\n\n"
-            "Private chat:\n"
-            "• Taip /scan untuk aktifkan Private Chat Detector Mode.\n"
-            "• Selepas itu, hantar mesej yang ingin diperiksa.\n"
-            "• Bot hanya menyokong mesej teks dalam Bahasa Melayu atau campuran Bahasa-Inggeris sahaja.\n"
-            "• Taip /stop untuk hentikan Private Chat Detector Mode.\n\n"
-            "Group chat:\n"
-            "• Tambah bot ke dalam group Telegram.\n"
-            "• Bot akan mengimbas mesej teks secara automatik.\n"
-            "• Jika mesej disyaki phishing/scam, bot akan menghantar amaran.\n\n"
+            "Private Chat Mode:\n"
+            "1. Taip /scan untuk aktifkan Private Chat Mode.\n"
+            "2. Hantar mesej yang ingin diperiksa.\n"
+            "3. Bot hanya menyokong mesej teks dalam Bahasa Melayu atau campuran Melayu-Inggeris sahaja.\n"
+            "4. Taip /stop untuk hentikan Private Chat Mode.\n\n"
+            "Group Chat Mode:\n"
+            "1. Tambah bot ke dalam group Telegram.\n"
+            "2. Bot akan mengimbas mesej teks secara automatik.\n"
+            "3. Jika mesej disyaki sebagai phishing/scam, bot akan menghantar amaran.\n\n"
             "Arahan:\n"
             "/start - Aktifkan bot\n"
-            "/scan - Aktifkan Private Chat Detector Mode\n"
-            "/stop - Hentikan Private Chat Detector Mode\n"
+            "/scan - Aktifkan Private Chat Mode\n"
+            "/stop - Hentikan Private Chat Mode\n"
             "/help - Lihat panduan penggunaan"
         )
 
 
-# Activate private detector mode
+# Activate private chat mode
 async def scan_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.message:
         chat_type = update.effective_chat.type
 
+        # /scan command is not applicable in group chat mode
         if chat_type != "private":
             await update.message.reply_text(
-                "Arahan /scan hanya digunakan dalam chat peribadi.\n\n"
+                "Arahan /scan hanya digunakan dalam Private Chat Mode.\n\n"
                 "Dalam group chat, bot akan mengimbas mesej secara automatik."
             )
             return
@@ -81,14 +82,15 @@ async def scan_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         )
 
 
-# Stop private chat detection for the current user
+# Stop private detector mode for the current user
 async def stop_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.message:
         chat_type = update.effective_chat.type
 
+        # /stop command is not applicable in group chat mode
         if chat_type != "private":
             await update.message.reply_text(
-                "Arahan /stop hanya digunakan dalam chat peribadi.\n\n"
+                "Arahan /stop hanya digunakan dalam Private Chat Mode.\n\n"
                 "Dalam group chat, bot akan terus mengimbas mesej secara automatik."
             )
             return
