@@ -175,9 +175,9 @@ async def process_private_text(
                 await context.bot.send_message(
                     chat_id=chat_id,
                     text=(
-                        "⚠️ Bahasa mesej tidak disokong.\n\n"
-                        "Bot ini hanya menyokong pengesanan phishing/scam untuk mesej "
-                        "dalam Bahasa Melayu atau campuran Bahasa-Inggeris sahaja.\n\n"
+                        "⚠️ Format bahasa mesej tidak disokong.\n\n"
+                        "Bot ini hanya menyokong pengesanan untuk mesej "
+                        "dalam Bahasa Melayu atau campuran Melayu-Inggeris sahaja.\n\n"
                         "Sila hantar semula mesej dalam bahasa yang disokong untuk diimbas."
                     ),
                     reply_to_message_id=message_id
