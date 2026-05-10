@@ -15,10 +15,10 @@ DATASET_PATH = BASE_DIR / "data" / "dataset.csv"
 
 df = pd.read_csv(DATASET_PATH)
 
-# Keep only required columns
+# Keep only required columns: text, label
 df = df[["text", "label"]].dropna()
 
-# Normalize dataset text using the same preprocessing function
+# Normalize dataset text using the same preprocessing functions
 df["clean_text"] = df["text"].astype(str).apply(normalize_text)
 
 
@@ -32,19 +32,15 @@ dataset_vectors = retrieval_vectorizer.fit_transform(df["clean_text"])
 
 
 # Retrieve similar examples from the dataset
-# Input:
-# - message_text: new incoming message
-# - top_k: number of similar examples to retrieve
-# - label_filter:
-#     1 = retrieve phishing examples only
-#     0 = retrieve safe examples only
-#     None = retrieve from all dataset examples
-#
-# Output:
-# - list of dictionaries containing text, label, and similarity score
 def retrieve_similar_examples(
+        
+        # New incoming message
         message_text: str,
+        
+        # Number of similar examples to retrieve: 3
         top_k: int = 3,
+        
+        # Label filter: 1 = phishing examples, 0 = safe examples, none = all examples
         label_filter=None
 ) -> list[dict]:
     cleaned_message = normalize_text(message_text)
@@ -61,7 +57,9 @@ def retrieve_similar_examples(
     top_examples = temp_df.sort_values(by="similarity", ascending=False).head(top_k)
 
     results = []
-
+    
+    
+    # Display list of dictionaries containing text, label and similarity score
     for _, row in top_examples.iterrows():
         results.append({
             "text": row["text"],
