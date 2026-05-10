@@ -41,7 +41,7 @@ async def handle_private_text(
     # In private chat, only scan messages after user activates /scan
     if user_id not in active_private_users:
         await update.message.reply_text(
-            "Sila taip /scan untuk mengaktifkan Private Chat Detector Mode."
+            "Sila taip /scan untuk mengaktifkan Private Chat Mode."
         )
         return
 
@@ -85,10 +85,10 @@ async def handle_non_text(
     if chat_type != "private":
         return
 
-    # If private detector mode is not active, ask user to activate /scan first
+    # If private chat mode is not active, ask user to activate /scan first
     if user_id not in active_private_users:
         await update.message.reply_text(
-            "Sila taip /scan untuk mengaktifkan Private Chat Detector Mode.",
+            "Sila taip /scan untuk mengaktifkan Private Chat Mode.",
             reply_to_message_id=message_id
         )
         return
@@ -194,21 +194,23 @@ async def process_private_text(
                 label_filter=1
             )
 
-            # If ML classifies message as phishing/scam, display reasons
+            # If ML classifies message as phishing, display reasons
             if prediction == 1:
                 explanation = generate_explanation(message_text, similar_examples)
 
                 await context.bot.send_message(
                     chat_id=chat_id,
                     text=(
-                            "⚠️ Amaran: Mesej ini disyaki sebagai phishing/scam.\n\n"
+                            "⚠️ Amaran: Mesej ini dikesan sebagai phishing/scam.\n\n"
                             + explanation
+                            + "\n\n"
+                            "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
                     ),
                     reply_to_message_id=message_id
                 )
                 continue
 
-            # If ML classifies message as safe, use LLM verification as double-check
+            # If ML classifies message as safe, use LLM verification for double-checking
             llm_suspicious = verify_safe_message(message_text, similar_examples)
 
             if llm_suspicious:
@@ -218,8 +220,9 @@ async def process_private_text(
                     chat_id=chat_id,
                     text=(
                             "⚠️ Amaran: Mesej ini kemungkinan mempunyai unsur phishing/scam.\n\n"
-                            "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan.\n\n"
                             + explanation
+                            + "\n\n"
+                            "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
                     ),
                     reply_to_message_id=message_id
                 )
@@ -274,8 +277,8 @@ async def process_non_text(
                     "🛑 Terlalu banyak kandungan tidak disokong dihantar.\n\n"
                     f"Sebanyak {len(recent_messages)} kandungan bukan teks dikesan dalam "
                     f"{PRIVATE_RATE_LIMIT_WINDOW} saat.\n"
-                    "Bot ini hanya menyokong pengesanan phishing/scam berasaskan teks sahaja.\n"
-                    "Sila salin dan hantar kandungan teks mesej tersebut untuk diimbas semula."
+                    "Bot ini hanya menyokong pengesanan mesej berasaskan teks sahaja.\n"
+                    "Sila salin dan hantar kandungan mesej tersebut untuk diimbas semula."
                 )
             )
 
@@ -291,8 +294,8 @@ async def process_non_text(
                 chat_id=chat_id,
                 text=(
                     "⚠️ Kandungan ini tidak dapat diimbas.\n\n"
-                    "Bot ini hanya menyokong pengesanan phishing/scam berasaskan teks sahaja.\n"
-                    "Sila salin dan hantar kandungan teks mesej tersebut untuk diimbas semula."
+                    "Bot ini hanya menyokong pengesanan mesej berasaskan teks sahaja.\n"
+                    "Sila salin dan hantar kandungan mesej tersebut untuk diimbas semula."
                 ),
                 reply_to_message_id=message_id
             )
