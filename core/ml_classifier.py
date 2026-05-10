@@ -15,15 +15,16 @@ model = joblib.load(MODEL_PATH)
 vectorizer = joblib.load(VECTORIZER_PATH)
 
 
-# Normalize incoming message text before classification
+# Apply normalization on incoming message text before classification
 def normalize_text(text: str) -> str:
+    
     # Convert text to lowercase
     text = str(text).lower().strip()
 
     # Reduce excessive repeated characters
     text = re.sub(r"(.)\1{2,}", r"\1\1", text)
 
-    # Reduce excessive repeated punctuation
+    # Reduce excessive repeated punctuations
     text = re.sub(r"([!?])\1{2,}", r"\1\1", text)
 
     # Normalize whitespace
@@ -32,7 +33,7 @@ def normalize_text(text: str) -> str:
     return text
 
 
-# Predict whether a message is safe or phishing/scam
+# Predict whether a message is safe or phishing
 def predict_label(message_text: str) -> int:
     # Normalize raw message text
     cleaned = normalize_text(message_text)
@@ -47,5 +48,5 @@ def predict_label(message_text: str) -> int:
     # Use the trained SVM model to classify the message
     prediction = model.predict(features)[0]
 
-    # Prediction output: 0 = safe, 1 = phishing/scam
+    # Prediction output: 0 = safe, 1 = phishing
     return int(prediction)
