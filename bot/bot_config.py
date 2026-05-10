@@ -9,8 +9,7 @@ GROUP_RATE_LIMIT_WINDOW = 15
 GROUP_PROCESS_DELAY = 1
 GROUP_PHISHING_THRESHOLD = 2
 
-# Supported language settings
-SUPPORTED_LANGUAGE_CODES = {"en", "id", "ms"}
+# Script/language validation settings
 MIN_LANGUAGE_DETECTION_CHARS = 8
 
 # Input length validation settings
