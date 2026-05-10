@@ -55,7 +55,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
     print(f"Error: {context.error}")
 
 
-# Initializes the Telegram bot and registers commands + message handlers
+# Initialize the Telegram bot and register commands and message handlers
 def main() -> None:
     app = Application.builder().token(BOT_TOKEN).build()
 
@@ -69,6 +69,9 @@ def main() -> None:
 
     app.add_error_handler(error_handler)
 
+
+    # Render deployment functions
+    
     PORT = int(os.getenv("PORT", 10000))
     WEBHOOK_URL = os.getenv("WEBHOOK_URL")
     WEBHOOK_SECRET_PATH = os.getenv("WEBHOOK_SECRET_PATH")
