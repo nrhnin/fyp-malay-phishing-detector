@@ -179,11 +179,11 @@ async def process_private_text(
                     chat_id=chat_id,
                     text=(
                         "⚠️ Amaran: Mesej ini dikesan sebagai phishing/scam.\n\n"
-                        "Sebab mesej ini disyaki:\n"
+                        "Antara sebab-sebabnya:\n"
                         "• Pautan dalam mesej ini mengandungi aksara yang menyerupai huruf biasa, "
                         "tetapi sebenarnya menggunakan aksara bukan Latin seperti Cyrillic.\n"
-                        "• Teknik ini boleh digunakan untuk menyamar sebagai pautan rasmi atau jenama yang sah.\n\n"
-                        "Sila buat semakan terlebih dahulu sebelum menekan sebarang pautan."
+                        "• Teknik ini boleh digunakan untuk menyamar sebagai pautan rasmi yang sah.\n\n"
+                        "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
                     ),
                     reply_to_message_id=message_id
                 )
@@ -223,7 +223,7 @@ async def process_private_text(
                             "⚠️ Amaran: Mesej ini dikesan sebagai phishing/scam.\n\n"
                             + explanation
                             + "\n\n"
-                            "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
+                              "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
                     ),
                     reply_to_message_id=message_id
                 )
@@ -241,7 +241,7 @@ async def process_private_text(
                             "⚠️ Amaran: Mesej ini kemungkinan mempunyai unsur phishing/scam.\n\n"
                             + explanation
                             + "\n\n"
-                            "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
+                              "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
                     ),
                     reply_to_message_id=message_id
                 )
