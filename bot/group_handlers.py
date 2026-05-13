@@ -7,6 +7,7 @@ import time
 from core.ml_classifier import predict_label
 from core.rag_retriever import retrieve_similar_examples
 from core.llm_explanation import generate_explanation, verify_safe_message
+from core.language_validation import contains_cyrillic_in_url_like_text
 
 from bot.bot_config import (
     GROUP_RATE_LIMIT_COUNT,
@@ -92,6 +93,16 @@ async def process_group_text(
         for item in recent_messages:
             message_text = item["text"]
 
+            # Homoglyph URL attack check
+            if contains_cyrillic_in_url_like_text(message_text):
+                phishing_messages.append({
+                    "message_id": item["message_id"],
+                    "text": message_text,
+                    "similar_examples": [],
+                    "alert_type": "homoglyph_url"
+                })
+                continue
+
             # ML classification
             prediction = predict_label(message_text)
 
@@ -130,10 +141,10 @@ async def process_group_text(
 
         # Condition for spam warning display
         if (
-                
+
                 # User sends more than 5 messages
                 message_count > GROUP_RATE_LIMIT_COUNT
-                
+
                 # At least 2 messages are classified as phishing
                 and phishing_count >= GROUP_PHISHING_THRESHOLD
         ):
@@ -161,7 +172,17 @@ async def process_group_text(
                 phishing_item["similar_examples"]
             )
 
-            if phishing_item["alert_type"] == "ml_phishing":
+            if phishing_item["alert_type"] == "homoglyph_url":
+                alert_text = (
+                    "⚠️ Amaran: Mesej ini dikesan sebagai phishing/scam.\n\n"
+                    "Antara sebab-sebabnya:\n"
+                    "• Pautan dalam mesej ini mengandungi aksara yang menyerupai huruf biasa, "
+                    "tetapi sebenarnya menggunakan aksara bukan Latin seperti Cyrillic.\n"
+                    "• Teknik ini boleh digunakan untuk menyamar sebagai pautan rasmi yang sah.\n\n"
+                    "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
+                )
+
+            elif phishing_item["alert_type"] == "ml_phishing":
                 alert_text = (
                         "⚠️ Amaran: Mesej ini dikesan sebagai phishing/scam.\n\n"
                         + explanation
@@ -196,14 +217,17 @@ async def process_group_text(
 
                 if phishing_item["alert_type"] == "ml_phishing":
                     alert_text = (
-                            "⚠️ Amaran: Mesej ini disyaki sebagai phishing/scam.\n\n"
+                            "⚠️ Amaran: Mesej ini dikesan sebagai phishing/scam.\n\n"
                             + explanation
+                            + "\n\n"
+                            "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
                     )
                 else:
                     alert_text = (
                             "⚠️ Amaran: Mesej ini kemungkinan mempunyai unsur phishing/scam.\n\n"
-                            "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan.\n\n"
                             + explanation
+                            + "\n\n"
+                            "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
                     )
 
                 await context.bot.send_message(
