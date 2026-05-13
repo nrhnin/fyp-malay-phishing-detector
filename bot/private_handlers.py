@@ -180,7 +180,7 @@ async def process_private_text(
                     text=(
                         "⚠️ Amaran: Mesej ini dikesan sebagai phishing/scam.\n\n"
                         "Antara sebab-sebabnya:\n"
-                        "• Pautan dalam mesej ini mengandungi aksara yang menyerupai huruf biasa, "
+                        "• Pautan link dalam mesej ini mengandungi aksara yang menyerupai huruf biasa, "
                         "tetapi sebenarnya menggunakan aksara bukan Latin seperti Cyrillic.\n"
                         "• Teknik ini boleh digunakan untuk menyamar sebagai pautan rasmi yang sah.\n\n"
                         "Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
