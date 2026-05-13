@@ -7,7 +7,10 @@ import time
 from core.ml_classifier import predict_label
 from core.rag_retriever import retrieve_similar_examples
 from core.llm_explanation import generate_explanation, verify_safe_message
-from core.language_validation import is_supported_language
+from core.language_validation import (
+    is_supported_language,
+    contains_cyrillic_in_url_like_text,
+)
 
 from bot.bot_config import (
     PRIVATE_RATE_LIMIT_COUNT,
@@ -165,6 +168,22 @@ async def process_private_text(
                         f"Bot ini hanya menyokong mesej sehingga "
                         f"{MAX_PRIVATE_MESSAGE_LENGTH} aksara bagi setiap imbasan.\n"
                         "Sila ringkaskan mesej atau hantar bahagian penting sahaja untuk diimbas."
+                    ),
+                    reply_to_message_id=message_id
+                )
+                continue
+
+            # Homoglyph URL attack check
+            if contains_cyrillic_in_url_like_text(message_text):
+                await context.bot.send_message(
+                    chat_id=chat_id,
+                    text=(
+                        "⚠️ Amaran: Mesej ini disyaki sebagai phishing/scam.\n\n"
+                        "Sebab mesej ini disyaki:\n"
+                        "• Pautan dalam mesej ini mengandungi aksara yang menyerupai huruf biasa, "
+                        "tetapi sebenarnya menggunakan aksara bukan Latin seperti Cyrillic.\n"
+                        "• Teknik ini boleh digunakan untuk menyamar sebagai pautan rasmi atau jenama yang sah.\n\n"
+                        "Sila buat semakan terlebih dahulu sebelum menekan sebarang pautan."
                     ),
                     reply_to_message_id=message_id
                 )
