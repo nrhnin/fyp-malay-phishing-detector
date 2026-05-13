@@ -185,7 +185,7 @@ Output requirements:
 
 Output format:
 
-Sebab mesej ini disyaki:
+Antara sebab-sebabnya:
 • ...
 • ...
 """.strip()
@@ -219,9 +219,9 @@ Sebab mesej ini disyaki:
         print(f"LLM explanation error: {e}")
 
         return (
-            "Sebab mesej ini disyaki:\n"
+            "Antara sebab-sebabnya:\n"
             "• Mesej ini mempunyai corak yang menyerupai phishing/scam.\n"
-            "• Sila semak kandungan mesej dengan berhati-hati."
+            "• Sila buat semakan terlebih dahulu sebelum melakukan apa-apa tindakan."
         )
 
 
