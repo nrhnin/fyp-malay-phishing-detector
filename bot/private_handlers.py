@@ -178,7 +178,7 @@ async def process_private_text(
                 await context.bot.send_message(
                     chat_id=chat_id,
                     text=(
-                        "⚠️ Amaran: Mesej ini disyaki sebagai phishing/scam.\n\n"
+                        "⚠️ Amaran: Mesej ini dikesan sebagai phishing/scam.\n\n"
                         "Sebab mesej ini disyaki:\n"
                         "• Pautan dalam mesej ini mengandungi aksara yang menyerupai huruf biasa, "
                         "tetapi sebenarnya menggunakan aksara bukan Latin seperti Cyrillic.\n"
