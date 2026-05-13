@@ -37,7 +37,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             "Group Chat Mode:\n"
             "1. Tambah bot ke dalam group Telegram.\n"
             "2. Bot akan mengimbas mesej teks secara automatik.\n"
-            "3. Jika mesej disyaki sebagai phishing/scam, bot akan menghantar amaran.\n\n"
+            "3. Jika mesej dikesan sebagai phishing/scam, bot akan menghantar amaran.\n\n"
             "Arahan:\n"
             "/start - Aktifkan bot\n"
             "/scan - Aktifkan Private Chat Mode\n"
